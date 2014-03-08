@@ -7,14 +7,14 @@ void handle_init(void) {
 	// Create a window and text layer
 	window = window_create();
 	exchange_layer = text_layer_create(GRect(0, 0, 144, 154));
-  price_layer = text_layer_create(GRect(50, 50, 120, 170));
+  price_layer = text_layer_create(GRect(0, 50, 144, 200));
 	
 	text_layer_set_text(exchange_layer, "Bitstamp");
 	text_layer_set_font(exchange_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
 	text_layer_set_text_alignment(exchange_layer, GTextAlignmentCenter);
   
   text_layer_set_text(price_layer, "$600");
-	text_layer_set_font(price_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
+	text_layer_set_font(price_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
 	text_layer_set_text_alignment(price_layer, GTextAlignmentCenter);
 	
 	// Add the text layer to the window
