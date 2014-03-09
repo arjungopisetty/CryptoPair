@@ -6,19 +6,29 @@ function HTTPGET(url) {
 }
 
 var sett = function() {
+  var response, response2;
+  var json, json2;
+  var bprice, dprice, lprice;
+  
   console.log("#Set method called");
   
-  var response = HTTPGET("https://api.bitcoinaverage.com/all");
+  // Bitcoin
+  response = HTTPGET("https://api.bitcoinaverage.com/all");
+  json = JSON.parse(response);
+  bprice = json.USD.averages.last;
   
-  var json = JSON.parse(response);
+  // Dogecoin
+  response2 = HTTPGET("http://www.cryptocoincharts.info/v2/api/listCoins");
+  json2 = JSON.parse(response2);
+  console.log("doge btc: " + json2[61].price_btc);
+  dprice = json2[61].price_btc * bprice * 10000;
+  console.log("doge: " + dprice);
   
-  var last = json.USD.averages.last;
-  console.log("last: " + last);
+  // Litecoin
+  lprice = json2[123].price_btc * bprice;
+  console.log("lite: " + lprice);
   
-  var bid = json.USD.averages.bid;
-  console.log("bid: " + bid);
-  
-  var dict = {"KEY_LAST" : last, "KEY_BID" : bid};
+  var dict = {"KEY_BPRICE" : bprice, "KEY_DPRICE" : dprice, "KEY_LPRICE" : lprice};
      
   // Send data to watch for display
   Pebble.sendAppMessage(dict);

@@ -2,12 +2,13 @@
   
 Window* window;
 
-TextLayer *currency_layer, *last_layer, *bid_layer, *time_layer;
-char last_buffer[64], bid_buffer[64], time_buffer[32];
+TextLayer *currency_layer, *bitcoin_layer, *dogecoin_layer, *litecoin_layer, *time_layer;
+char bitcoin_buffer[64], dogecoin_buffer[64], litecoin_buffer[64], time_buffer[32];
 
 enum {
-  KEY_LAST = 0,
-  KEY_BID = 1,
+  KEY_BPRICE = 0,
+  KEY_DPRICE = 1,
+  KEY_LPRICE = 2,
 };
 
 void process_tuple(Tuple *t)
@@ -20,16 +21,21 @@ void process_tuple(Tuple *t)
  
   //Decide what to do
   switch(key) {
-    case KEY_LAST:
-      //Last received
-      snprintf(last_buffer, sizeof("100000000000000"), "Last: %d", value);
-      text_layer_set_text(last_layer, (char*) &last_buffer);
+    case KEY_BPRICE:
+      // Bitcoin received
+      snprintf(bitcoin_buffer, sizeof("100000000000000000000000"), "Bitcoin: %d", value);
+      text_layer_set_text(bitcoin_layer, (char*) &bitcoin_buffer);
       break;
-    case KEY_BID:
-      //Bid received
-      snprintf(bid_buffer, sizeof("100000000000000"), "Bid: %d", value);
-      text_layer_set_text(bid_layer, (char*) &bid_buffer);
+    case KEY_DPRICE:
+      // Dogecoin received
+      snprintf(dogecoin_buffer, sizeof("100000000000000000000000"), "Dogecoin (10000): %d", value);
+      text_layer_set_text(dogecoin_layer, (char*) &dogecoin_buffer);
       break;
+    case KEY_LPRICE:
+      // Litecoin received
+      snprintf(litecoin_buffer, sizeof("100000000000000000000000"), "Litecoin: %d", value);
+      text_layer_set_text(litecoin_layer, (char*) &litecoin_buffer);
+    
   }
  
   //Set time this update came in
@@ -53,19 +59,23 @@ static TextLayer* init_text_layer(GRect location, GColor colour, GColor backgrou
 
 void window_load(Window *window)
 {
-	currency_layer = init_text_layer(GRect(0, 0, 144, 154), GColorBlack, GColorClear, "RESOURCE_ID_BITHAM_42_BOLD", GTextAlignmentCenter);
-	text_layer_set_text(currency_layer, "Bitcoin");
+	currency_layer = init_text_layer(GRect(0, 0, 144, 154), GColorBlack, GColorClear, "RESOURCE_ID_GOTHIC_28_BOLD", GTextAlignmentCenter);
+	text_layer_set_text(currency_layer, "Cryptopair");
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(currency_layer));
 
-	last_layer = init_text_layer(GRect(0, 60, 144, 250), GColorBlack, GColorClear, "RESOURCE_ID_GOTHIC_28", GTextAlignmentCenter);
-	text_layer_set_text(last_layer, "Last: N/A");
-	layer_add_child(window_get_root_layer(window), text_layer_get_layer(last_layer));
+	bitcoin_layer = init_text_layer(GRect(0, 30, 144, 250), GColorBlack, GColorClear, "RESOURCE_ID_GOTHIC_28", GTextAlignmentCenter);
+	text_layer_set_text(bitcoin_layer, "Bitcoin: N/A");
+	layer_add_child(window_get_root_layer(window), text_layer_get_layer(bitcoin_layer));
 
-	bid_layer = init_text_layer(GRect(0, 85, 144, 250), GColorBlack, GColorClear, "RESOURCE_ID_GOTHIC_28", GTextAlignmentCenter);
-	text_layer_set_text(bid_layer, "Bid: N/A");
-	layer_add_child(window_get_root_layer(window), text_layer_get_layer(bid_layer));
+	dogecoin_layer = init_text_layer(GRect(0, 60, 144, 250), GColorBlack, GColorClear, "RESOURCE_ID_GOTHIC_18", GTextAlignmentCenter);
+	text_layer_set_text(dogecoin_layer, "Dogecoin (10000): N/A");
+	layer_add_child(window_get_root_layer(window), text_layer_get_layer(dogecoin_layer));
+  
+  litecoin_layer = init_text_layer(GRect(0, 75, 144, 250), GColorBlack, GColorClear, "RESOURCE_ID_GOTHIC_28", GTextAlignmentCenter);
+	text_layer_set_text(litecoin_layer, "Litecoin: N/A");
+	layer_add_child(window_get_root_layer(window), text_layer_get_layer(litecoin_layer));
 
-	time_layer = init_text_layer(GRect(0, 140, 144, 100), GColorBlack, GColorClear, "RESOURCE_ID_GOTHIC_18", GTextAlignmentCenter);
+	time_layer = init_text_layer(GRect(0, 120, 144, 100), GColorBlack, GColorClear, "RESOURCE_ID_GOTHIC_18", GTextAlignmentCenter);
 	text_layer_set_text(time_layer, "Last updated: N/A");
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(time_layer));
 }
@@ -73,8 +83,9 @@ void window_load(Window *window)
 void window_unload(Window *window)
 {
   text_layer_destroy(currency_layer);
-  text_layer_destroy(last_layer);
-  text_layer_destroy(bid_layer);
+  text_layer_destroy(bitcoin_layer);
+  text_layer_destroy(dogecoin_layer);
+  text_layer_destroy(litecoin_layer);
   text_layer_destroy(time_layer); 
 }
 
