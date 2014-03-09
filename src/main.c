@@ -26,10 +26,8 @@ static void process_tuple(Tuple *t) {
   strcpy(string_value, t->value->cstring);
  
   //Decide what to do
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Beginning Switch");
   switch(key) {
     case KEY_BPRICE:
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Entered Bitcoin Case");
       // Bitcoin received
       snprintf(bitcoin_buffer, sizeof("Dcoin: couldbereallylongname"), "$%s", string_value);
       text_layer_set_text(bitcoin_price, (char*) &bitcoin_buffer);
@@ -42,7 +40,6 @@ static void process_tuple(Tuple *t) {
     
       break;
     case KEY_DPRICE:
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Entered Dogecoin Case");
       // Dogecoin received
       snprintf(dogecoin_buffer, sizeof("Dogecoin: couldbereallylongname"), "$%s", string_value);
       text_layer_set_text(dogecoin_price, (char*) &dogecoin_buffer);
@@ -55,7 +52,6 @@ static void process_tuple(Tuple *t) {
     
       break;
     case KEY_LPRICE:
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Entered Litecoin Case");
       // Litecoin received
       snprintf(litecoin_buffer, sizeof("Litecoin: couldbereallylongname"), "$%s", string_value);
       text_layer_set_text(litecoin_price, (char*) &litecoin_buffer);
@@ -65,34 +61,29 @@ static void process_tuple(Tuple *t) {
       struct tm *tm3 = localtime(&temp3);
       strftime(time_buffer3, sizeof("Last updated: XX:XX"), "Last updated: %H:%M", tm3);
       text_layer_set_text(time_layer3, (char*) &time_buffer3);
+    
       break;
-    default:
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Defaulted");
-    }
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Finished Switch");
-}
-
-static void send_int(uint8_t key, uint8_t cmd)
-{
-    DictionaryIterator *iter;
-    app_message_outbox_begin(&iter);
-     
-    Tuplet value = TupletInteger(key, cmd);
-    dict_write_tuplet(iter, &value);
-     
-    app_message_outbox_send();
-}
-
-static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
-  /*update $$*/
-  vibes_short_pulse();
-  send_int(5, 5);
+  }
 }
 
 static void click_config_provider(void *context) {
 //  window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);*
 //  window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
-  window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
+//  window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
+}
+
+static TextLayer* handle_text_init(char *name){
+  TextLayer *tL;
+  tL = text_layer_create(GRect(0,0,144,154));
+  text_layer_set_text(tL, name);
+	text_layer_set_font(tL, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
+  text_layer_set_background_color(tL, GColorClear);
+	text_layer_set_text_alignment(tL, GTextAlignmentCenter);
+  return tL;
+}
+
+static void handle_text_deinit(TextLayer *tL){
+  text_layer_destroy(tL);
 }
 
 static TextLayer* init_text_layer(GRect location, GColor colour, GColor background, const char *res_id, GTextAlignment alignment) {
@@ -151,6 +142,7 @@ static void handle_wins_init(void){
   for(int i = 0; i < 3; i++){
     window_set_click_config_provider(wins[i], click_config_provider);
   }
+  
   init_layers();
 }
 
@@ -161,9 +153,6 @@ static void handle_wins_deinit(void){
   text_layer_destroy(time_layer1); 
   text_layer_destroy(time_layer2);
   text_layer_destroy(time_layer3);
-  text_layer_destroy(bitcoin_price);
-  text_layer_destroy(dogecoin_price);
-  text_layer_destroy(litecoin_price);
   
   window_destroy(wins[0]);
   window_destroy(wins[1]);
@@ -194,6 +183,27 @@ static void in_received_handler(DictionaryIterator *iter, void *context)
       process_tuple(t);
     }
   }
+}
+
+static void send_int(uint8_t key, uint8_t cmd)
+{
+    DictionaryIterator *iter;
+    app_message_outbox_begin(&iter);
+     
+    Tuplet value = TupletInteger(key, cmd);
+    dict_write_tuplet(iter, &value);
+     
+    app_message_outbox_send();
+}
+
+static void tick_callback(struct tm *tick_time, TimeUnits units_changed)
+{
+    //Every minute
+    if(tick_time->tm_min % 1 == 0)
+    {
+        //Send an arbitrary message, the response will be handled by in_received_handler()
+        send_int(5, 5);
+    }
 }
 
 static void window_init(Window *window){
@@ -228,6 +238,9 @@ static void window_init(Window *window){
   layer_add_child(window_layer, simple_menu_layer_get_layer(sml));
   
   handle_wins_init();
+  
+  // Clicker
+  // window_set_click_config_provider(window, click_config_provider);
 }
 
 static void window_deinit(void) {
@@ -242,6 +255,9 @@ static void handle_init(void) {
   //Register AppMessage events
   app_message_register_inbox_received(in_received_handler);           
   app_message_open(512, 512);    //Large input and output buffer sizes
+  
+  //Register to receive minutely updates
+  tick_timer_service_subscribe(MINUTE_UNIT, tick_callback);
   
   window_stack_push(window, true /* Animated */);
 }
