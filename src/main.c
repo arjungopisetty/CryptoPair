@@ -18,7 +18,7 @@ enum {
   KEY_LPRICE = 2,
 };
 
-void process_tuple(Tuple *t) {
+static void process_tuple(Tuple *t) {
   //Get key
   int key = t->key;
  
@@ -71,7 +71,7 @@ void process_tuple(Tuple *t) {
 
 //void up_click_handler(ClickRecognizerRef recognizer, void *context) {}
 //void down_click_handler(ClickRecognizerRef recognizer, void *context) {}
-void select_click_handler(ClickRecognizerRef recognizer, void *context) {
+static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
   /*update $$*/
   vibes_short_pulse();
 }
@@ -106,7 +106,7 @@ static TextLayer* init_text_layer(GRect location, GColor colour, GColor backgrou
   return layer;
 }
 
-void init_layers(void) {
+static void init_layers(void) {
 	bitcoin_layer = init_text_layer(GRect(0, 0, 144, 250), GColorBlack, GColorClear, "RESOURCE_ID_BITHAM_42_BOLD", GTextAlignmentCenter);
 	text_layer_set_text(bitcoin_layer, "Bitcoin");
 	layer_add_child(window_get_root_layer(wins[0]), text_layer_get_layer(bitcoin_layer));
@@ -198,7 +198,7 @@ static void in_received_handler(DictionaryIterator *iter, void *context)
   }
 }
 
-void send_int(uint8_t key, uint8_t cmd)
+static void send_int(uint8_t key, uint8_t cmd)
 {
     DictionaryIterator *iter;
     app_message_outbox_begin(&iter);
@@ -209,7 +209,7 @@ void send_int(uint8_t key, uint8_t cmd)
     app_message_outbox_send();
 }
 
-void tick_callback(struct tm *tick_time, TimeUnits units_changed)
+static void tick_callback(struct tm *tick_time, TimeUnits units_changed)
 {
     //Every minute
     if(tick_time->tm_min % 1 == 0)
@@ -282,6 +282,8 @@ static void handle_deinit(void) {
   
   window_deinit();
   window_destroy(window);
+  
+  tick_timer_service_unsubscribe();
 }
 
 int main(void) {
