@@ -8,7 +8,7 @@ void process_tuple(Tuple *t) {
   
   // Get integer value, if present
   int value = t->value->int32;
- 
+  
   // Price received
   text_layer_set_text(price_layer, (char*) &price_buffer);
  
@@ -43,6 +43,7 @@ void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, voi
 }
 
 static void in_received_handler(DictionaryIterator *iter, void *context) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "received ");
   // Get data
   Tuple *t = dict_read_first(iter);
   if(t) {
