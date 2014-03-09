@@ -29,3 +29,10 @@ Pebble.addEventListener("ready",
     sett();
   }
 );
+
+Pebble.addEventListener("appmessage",
+  function(e) {
+    //Watch wants new data!
+    sett();
+  }
+);

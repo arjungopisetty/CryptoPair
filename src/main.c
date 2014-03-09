@@ -97,7 +97,28 @@ static void in_received_handler(DictionaryIterator *iter, void *context)
     }
   }
 }
-  
+
+void send_int(uint8_t key, uint8_t cmd)
+{
+    DictionaryIterator *iter;
+    app_message_outbox_begin(&iter);
+     
+    Tuplet value = TupletInteger(key, cmd);
+    dict_write_tuplet(iter, &value);
+     
+    app_message_outbox_send();
+}
+
+void tick_callback(struct tm *tick_time, TimeUnits units_changed)
+{
+    //Every minute
+    if(tick_time->tm_min % 1 == 0)
+    {
+        //Send an arbitrary message, the response will be handled by in_received_handler()
+        send_int(5, 5);
+    }
+}
+
 void init()
 {
   window = window_create();
@@ -111,12 +132,17 @@ void init()
   app_message_register_inbox_received(in_received_handler);           
   app_message_open(512, 512);    //Large input and output buffer sizes
   
+  //Register to receive minutely updates
+  tick_timer_service_subscribe(MINUTE_UNIT, tick_callback);
+  
   window_stack_push(window, true);
 }
   
 void deinit()
 {
   window_destroy(window);
+  
+  tick_timer_service_unsubscribe();
 }
   
 int main(void)
