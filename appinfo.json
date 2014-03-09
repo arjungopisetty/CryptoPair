@@ -1,14 +1,14 @@
 {
     "versionLabel": "1.0",
-    "uuid": "5c8152fe-9545-4b67-a75c-c6f148320584",
+    "uuid": "775179e1-4142-4c28-a309-fc15ac3a3cb1",
     "appKeys": {},
-    "longName": "BitcoinTicker",
+    "longName": "HelloWorld",
     "versionCode": 1,
     "capabilities": [
         ""
     ],
-    "shortName": "BitcoinTicker",
-    "companyName": "arjun.gopisetty@gmail.com",
+    "shortName": "HelloWorld",
+    "companyName": "whydidibothermakingthis@gmail.",
     "watchapp": {
         "watchface": false
     },

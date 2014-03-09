@@ -21,6 +21,9 @@ void handle_init(void) {
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(exchange_layer));
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(price_layer));
 
+  //clicker
+  window_set_click_config_provider(window, click_config_provider);
+  
 	// Push the window
 	window_stack_push(window, true);
 	
@@ -35,6 +38,27 @@ void handle_deinit(void) {
 	
 	// Destroy the window
 	window_destroy(window);
+}
+
+//clicking stuffs
+void up_click_handler(ClickRecognizerRef recognizer, void *context)
+{
+}
+ 
+void down_click_handler(ClickRecognizerRef recognizer, void *context)
+{
+}
+ 
+void select_click_handler(ClickRecognizerRef recognizer, void *context)
+{ 
+  vibes_short_pulse();
+}
+
+void click_config_provider(void *context)
+{
+    window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
+    window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
+    window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
 }
 
 int main(void) {
