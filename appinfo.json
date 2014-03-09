@@ -8,11 +8,18 @@
         ""
     ],
     "shortName": "BitcoinTicker",
-    "companyName": "arjun.gopisetty@gmail.com",
+    "companyName": "KADE",
     "watchapp": {
         "watchface": false
     },
     "resources": {
-        "media": []
+        "media": [
+            {
+                "menuIcon": true,
+                "type": "png",
+                "name": "LOGO",
+                "file": "images/logo.png"
+            }
+        ]
     }
 }
