@@ -1,33 +1,37 @@
 {
     "versionLabel": "1.0",
-    "uuid": "5c8152fe-9545-4b67-a75c-c6f148320584",
+    "uuid": "0275821d-26a9-41cf-a204-2a181d729784",
     "appKeys": {
         "KEY_DPRICE": 1,
         "KEY_LPRICE": 2,
         "KEY_BPRICE": 0
     },
-    "longName": "BitcoinTicker",
+    "longName": "Tester",
     "versionCode": 1,
     "capabilities": [
         ""
     ],
-    "shortName": "BitcoinTicker",
-    "companyName": "KADE",
+    "shortName": "Tester",
+    "companyName": "k",
     "watchapp": {
         "watchface": false
     },
     "resources": {
         "media": [
             {
-                "menuIcon": true,
                 "type": "png",
-                "name": "LOGO2",
-                "file": "images/logov2.png"
+                "name": "LG_BIT",
+                "file": "images/LG_BIT.png"
             },
             {
                 "type": "png",
-                "name": "LOGO",
-                "file": "images/logo.png"
+                "name": "LG_DOGE",
+                "file": "images/LG_DOGE.png"
+            },
+            {
+                "type": "png",
+                "name": "LG_LITE",
+                "file": "images/LG_LITE.png"
             }
         ]
     }
