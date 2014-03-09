@@ -8,18 +8,18 @@
         ""
     ],
     "shortName": "BitcoinTicker",
-    "companyName": “KADE”,
+    "companyName": "KADE",
     "watchapp": {
         "watchface": false
     },
     "resources": {
         "media": [
-		{
-			“menuIcon”: true,
-          		"type": "png",
-         		“name": “Logo”,
-          		"file": “img/logo.png”
-        	}
-	]
+            {
+                "menuIcon": true,
+                "type": "png",
+                "name": "LOGO",
+                "file": "images/logo.png"
+            }
+        ]
     }
 }
