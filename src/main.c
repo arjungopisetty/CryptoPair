@@ -5,12 +5,11 @@ static Window *wins[3];
 static SimpleMenuLayer *sml;
 static SimpleMenuSection menu_sec[1];
 static SimpleMenuItem first_it[3];
-static TextLayer *bitC, *dogeC, *liteC;
 static GBitmap *bitcoin_img, *dogecoin_img, *litecoin_img;
 
 TextLayer *bitcoin_layer, *dogecoin_layer, *litecoin_layer, *time_layer1, *time_layer2, *time_layer3;
 TextLayer *bitcoin_price, *dogecoin_price, *litecoin_price;
-char bitcoin_buffer[64], dogecoin_buffer[64], litecoin_buffer[64], time_buffer1[32], time_buffer2[32], time_buffer3[32];
+char bitcoin_buffer[32], dogecoin_buffer[32], litecoin_buffer[32], time_buffer1[32], time_buffer2[32], time_buffer3[32];
 
 enum {
   KEY_BPRICE = 0,
@@ -26,13 +25,11 @@ static void process_tuple(Tuple *t) {
   char string_value[32];
   strcpy(string_value, t->value->cstring);
  
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "Outside Switch:%s", string_value);
   //Decide what to do
   switch(key) {
     case KEY_BPRICE:
       // Bitcoin received
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Bitcoin C:%s", string_value);
-      snprintf(bitcoin_buffer, sizeof("Bitcoin: couldbereallylongname"), "$%s", string_value);
+      snprintf(bitcoin_buffer, sizeof("Dcoin: couldbereallylongname"), "$%s", string_value);
       text_layer_set_text(bitcoin_price, (char*) &bitcoin_buffer);
     
       // Set time this update came in
@@ -44,7 +41,6 @@ static void process_tuple(Tuple *t) {
       break;
     case KEY_DPRICE:
       // Dogecoin received
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Dogecoin C:%s", string_value);
       snprintf(dogecoin_buffer, sizeof("Dogecoin: couldbereallylongname"), "$%s", string_value);
       text_layer_set_text(dogecoin_price, (char*) &dogecoin_buffer);
     
@@ -57,7 +53,6 @@ static void process_tuple(Tuple *t) {
       break;
     case KEY_LPRICE:
       // Litecoin received
-      APP_LOG(APP_LOG_LEVEL_DEBUG, "Litecoin C:%s", string_value);
       snprintf(litecoin_buffer, sizeof("Litecoin: couldbereallylongname"), "$%s", string_value);
       text_layer_set_text(litecoin_price, (char*) &litecoin_buffer);
     
@@ -66,20 +61,15 @@ static void process_tuple(Tuple *t) {
       struct tm *tm3 = localtime(&temp3);
       strftime(time_buffer3, sizeof("Last updated: XX:XX"), "Last updated: %H:%M", tm3);
       text_layer_set_text(time_layer3, (char*) &time_buffer3);
+    
+      break;
   }
-}
-
-//void up_click_handler(ClickRecognizerRef recognizer, void *context) {}
-//void down_click_handler(ClickRecognizerRef recognizer, void *context) {}
-static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
-  /*update $$*/
-  vibes_short_pulse();
 }
 
 static void click_config_provider(void *context) {
 //  window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);*
 //  window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
-  window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
+//  window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
 }
 
 static TextLayer* handle_text_init(char *name){
@@ -164,11 +154,8 @@ static void handle_wins_deinit(void){
   text_layer_destroy(time_layer2);
   text_layer_destroy(time_layer3);
   
-  handle_text_deinit(bitC);
   window_destroy(wins[0]);
-  handle_text_deinit(dogeC);
   window_destroy(wins[1]);
-  handle_text_deinit(liteC);
   window_destroy(wins[2]);
 }
 
@@ -276,6 +263,7 @@ static void handle_init(void) {
 }
 
 static void handle_deinit(void) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Hi im handeling deinit");
   gbitmap_destroy(bitcoin_img);
   gbitmap_destroy(dogecoin_img);
   gbitmap_destroy(litecoin_img);
