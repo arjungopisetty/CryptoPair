@@ -26,10 +26,20 @@ void down_click_handler(ClickRecognizerRef recognizer, void *context) {}
  
 void select_click_handler(ClickRecognizerRef recognizer, void *context) { 
   vibes_short_pulse();
+  // Refresh
 }
 
 static void click_config_provider(void *context) {
   window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
+}
+
+void out_sent_handler(DictionaryIterator *sent, void *context) {
+   // outgoing message was delivered
+}
+
+
+void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, void *context) {
+   // outgoing message failed
 }
 
 static void in_received_handler(DictionaryIterator *iter, void *context) {
@@ -46,6 +56,10 @@ static void in_received_handler(DictionaryIterator *iter, void *context) {
       process_tuple(t);
     }
   }
+}
+
+void in_dropped_handler(AppMessageResult reason, void *context) {
+   // incoming message dropped
 }
 
 void send_int(uint8_t key, uint8_t cmd) {
@@ -94,6 +108,9 @@ void handle_init(void) {
   
   // Register AppMessage events
   app_message_register_inbox_received(in_received_handler);           
+	app_message_register_inbox_dropped(in_dropped_handler); 
+	app_message_register_outbox_failed(out_failed_handler);
+  app_message_register_outbox_sent(out_sent_handler);
   app_message_open(512, 512);
   
   // Register to receive minutely updates
