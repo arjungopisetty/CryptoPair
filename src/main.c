@@ -19,6 +19,19 @@ void process_tuple(Tuple *t) {
   text_layer_set_text(time_layer, (char*) &time_buffer);
 }
 
+// clicking stuffs
+void up_click_handler(ClickRecognizerRef recognizer, void *context) {}
+   
+void down_click_handler(ClickRecognizerRef recognizer, void *context) {}
+ 
+void select_click_handler(ClickRecognizerRef recognizer, void *context) { 
+  vibes_short_pulse();
+}
+
+static void click_config_provider(void *context) {
+  window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
+}
+
 static void in_received_handler(DictionaryIterator *iter, void *context) {
   // Get data
   Tuple *t = dict_read_first(iter);
@@ -85,6 +98,9 @@ void handle_init(void) {
   
   // Register to receive minutely updates
   tick_timer_service_subscribe(MINUTE_UNIT, tick_callback);
+  
+  // Clicker
+  window_set_click_config_provider(window, click_config_provider);
   
   // Push the window
 	window_stack_push(window, true);
