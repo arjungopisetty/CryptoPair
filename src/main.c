@@ -2,10 +2,9 @@
 
 Window *window;
 TextLayer *currency_layer, *price_layer, *time_layer;
-char price_buffer[64], time_buffer[64];
+char price_buffer[64], time_buffer[32];
 
 void process_tuple(Tuple *t) {
-  
   // Get integer value, if present
   int value = t->value->int32;
  
@@ -98,7 +97,7 @@ void handle_init(void) {
   text_layer_set_background_color(currency_layer, GColorClear);
 	text_layer_set_text_alignment(currency_layer, GTextAlignmentCenter);
   
-  text_layer_set_text(price_layer, "$6000.00");
+  text_layer_set_text(price_layer, "N/A");
 	text_layer_set_font(price_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28));
 	text_layer_set_text_alignment(price_layer, GTextAlignmentCenter);
   
