@@ -21,10 +21,11 @@ void process_tuple(Tuple *t) {
 
 // clicking stuffs
 void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_background_color(*price_layer, GColorBlack)}
+  text_layer_set_background_color(price_layer, GColorBlack);
+}
    
 void down_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_background_color(*price_layer, GColorBlack)
+  text_layer_set_background_color(price_layer, GColorWhite);
 }
  
 void select_click_handler(ClickRecognizerRef recognizer, void *context) { 
