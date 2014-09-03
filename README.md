@@ -1,7 +1,7 @@
 BitcoinTicker
 =============
 
-Bitcoin ticker for Pebble.
+CryptoCurrency ticker for Pebble.
 
 ## Contributers
 
