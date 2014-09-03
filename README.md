@@ -1,4 +1,4 @@
-BitcoinTicker
+CryptoPair
 =============
 
 CryptoCurrency ticker for Pebble.
